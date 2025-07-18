@@ -41,7 +41,7 @@
         'sale'
     ],
     'external_dependencies': {
-        'python': ['Crypto', 'requests']
+        'python': ['requests']
     },
     'data': [
         'security/ir.model.access.csv',
