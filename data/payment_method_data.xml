@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_method_ccavenue" model="payment.method">
+        <field name="name">CCAvenue</field>
+        <field name="code">ccavenue</field>
+        <field name="sequence">1</field>
+        <field name="primary_payment_method_code">ccavenue</field>
+    </record>
+</odoo>

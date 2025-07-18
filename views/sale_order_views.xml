@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_ccavenue" model="ir.ui.view">
+        <field name="name">sale.order.form.ccavenue</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_quotation_sent']" position="after">
+                <button name="action_pay_with_ccavenue" 
+                        type="object" 
+                        string="Pay with CCAvenue" 
+                        class="btn-primary"
+                        attrs="{'invisible': ['|', ('state', 'in', ['draft', 'cancel']), ('invoice_status', '=', 'invoiced')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

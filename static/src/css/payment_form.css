@@ -1,0 +1,27 @@
+.payment_option_name {
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.payment_icon {
+    height: 30px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.o_payment_form_ccavenue {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.ccavenue_redirect_loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.ccavenue_redirect_loading .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}

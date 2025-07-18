@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_invoice_payment" name="Invoice Payment Portal">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Invoice Payment</t>
+            </t>
+            
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Pay Invoice: <t t-esc="invoice.name"/></h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-6">
+                                        <strong>Amount Due:</strong>
+                                        <span t-field="invoice.amount_residual" 
+                                              t-options="{'widget': 'monetary', 'display_currency': invoice.currency_id}"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>Due Date:</strong>
+                                        <span t-field="invoice.invoice_date_due"/>
+                                    </div>
+                                </div>
+                                
+                                <form action="/payment/transaction" method="post" class="o_payment_form">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="reference" t-att-value="invoice.name"/>
+                                    <input type="hidden" name="amount" t-att-value="invoice.amount_residual"/>
+                                    <input type="hidden" name="currency_id" t-att-value="invoice.currency_id.id"/>
+                                    <input type="hidden" name="partner_id" t-att-value="invoice.partner_id.id"/>
+                                    <input type="hidden" name="invoice_id" t-att-value="invoice.id"/>
+                                    
+                                    <div class="form-group">
+                                        <label>Select Payment Method:</label>
+                                        <div class="payment_options">
+                                            <t t-foreach="acquirers" t-as="acquirer">
+                                                <div class="form-check" t-if="acquirer.code == 'ccavenue'">
+                                                    <input class="form-check-input" type="radio" 
+                                                           name="acquirer_id" 
+                                                           t-att-value="acquirer.id" 
+                                                           t-att-id="'acquirer_%s' % acquirer.id"/>
+                                                    <label class="form-check-label" t-att-for="'acquirer_%s' % acquirer.id">
+                                                        <img src="/payment_ccavenue/static/src/img/ccavenue_logo.png" 
+                                                             alt="CCAvenue" style="height: 30px; margin-right: 10px;"/>
+                                                        CCAvenue
+                                                    </label>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                        Pay Now
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

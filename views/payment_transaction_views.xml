@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_transaction_form_ccavenue" model="ir.ui.view">
+        <field name="name">payment.transaction.form.ccavenue</field>
+        <field name="model">payment.transaction</field>
+        <field name="inherit_id" ref="payment.payment_transaction_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='provider_reference']" position="after">
+                <field name="ccavenue_tracking_id" attrs="{'invisible': [('provider_code', '!=', 'ccavenue')]}" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

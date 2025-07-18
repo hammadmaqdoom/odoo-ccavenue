@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payment_form_ccavenue" name="CCAvenue Payment Form" inherit_id="payment.payment_form">
+        <xpath expr="//t[@t-foreach='providers']//t[@t-if='provider.code']" position="before">
+            <t t-if="provider.code == 'ccavenue'">
+                <label>
+                    <input type="radio" 
+                           name="o_payment_radio" 
+                           t-att-value="provider.id" 
+                           t-att-data-provider-code="provider.code"
+                           t-att-checked="provider.id == default_provider_id"/>
+                    <span class="payment_option_name">CCAvenue</span>
+                    <img src="/payment_ccavenue/static/src/img/ccavenue_logo.png" 
+                         alt="CCAvenue" 
+                         class="payment_icon"/>
+                </label>
+                <div class="o_payment_form_ccavenue d-none">
+                    <p>You will be redirected to CCAvenue to complete your payment securely.</p>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

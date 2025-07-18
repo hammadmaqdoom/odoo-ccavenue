@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ccavenue_redirect_form" name="CCAvenue Redirect Form">
+        <form method="post" t-att-action="ccavenue_url" id="ccavenue_payment_form">
+            <input type="hidden" name="encRequest" t-att-value="enc_request"/>
+            <input type="hidden" name="access_code" t-att-value="access_code"/>
+        </form>
+    </template>
+
+    <template id="ccavenue_redirect" name="CCAvenue Payment Redirect">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Processing Payment</h4>
+                                <p class="card-text">Please wait while we redirect you to CCAvenue...</p>
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-call="ccavenue_redirect_form"/>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(function() {
+                        document.getElementById('ccavenue_payment_form').submit();
+                    }, 2000);
+                });
+            </script>
+        </t>
+    </template>
+</odoo>
