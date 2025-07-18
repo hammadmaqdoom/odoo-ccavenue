@@ -15,6 +15,11 @@
         - Email notifications via mail module
         - Full encryption/decryption support
         - Test and production modes
+        - Auto-install Python dependencies
+        
+        Dependencies:
+        - pycryptodome: For AES encryption/decryption
+        - requests: For API communications
         
         Modules Integration:
         - account: Invoice payments
@@ -24,7 +29,7 @@
         - portal: Customer portal payments
     """,
     'author': 'Digitaro',
-    'website': 'https://digitaro.co',
+    'website': 'https://www.digitaro.co/',
     'depends': [
         'base',
         'payment',
@@ -35,6 +40,9 @@
         'portal',
         'sale'
     ],
+    'external_dependencies': {
+        'python': ['Crypto', 'requests']
+    },
     'data': [
         'security/ir.model.access.csv',
         'data/payment_method_data.xml',
@@ -61,7 +69,6 @@
     'auto_install': False,
     'application': False,
     'license': 'LGPL-3',
-    'external_dependencies': {
-        'python': ['pycryptodome', 'requests']
-    },
+    'pre_init_hook': 'pre_init_hook',
+    'post_init_hook': 'post_init_hook',
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dependency_installer_wizard" model="ir.ui.view">
+        <field name="name">payment.ccavenue.dependency.installer.form</field>
+        <field name="model">payment.ccavenue.dependency.installer</field>
+        <field name="arch" type="xml">
+            <form string="CCAvenue Dependency Installer">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>CCAvenue Payment Gateway</h1>
+                        <h2>Python Dependencies Installer</h2>
+                    </div>
+                    
+                    <group attrs="{'invisible': [('state', '!=', 'check')]}">
+                        <p>This wizard will check and install required Python packages for CCAvenue integration.</p>
+                        <p><strong>Required packages:</strong></p>
+                        <ul>
+                            <li>pycryptodome - For encryption/decryption</li>
+                            <li>requests - For API communications</li>
+                        </ul>
+                    </group>
+                    
+                    <group attrs="{'invisible': [('state', '==', 'check')]}">
+                        <field name="dependency_status" attrs="{'invisible': [('dependency_status', '=', False)]}"/>
+                        <field name="installation_log" attrs="{'invisible': [('installation_log', '=', False)]}"/>
+                    </group>
+                </sheet>
+                
+                <footer>
+                    <button name="action_check_dependencies" 
+                            string="Check Dependencies" 
+                            type="object" 
+                            class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'check')]}"/>
+                    
+                    <button name="action_install_dependencies" 
+                            string="Install Missing Dependencies" 
+                            type="object" 
+                            class="btn-primary"
+                            attrs="{'invisible': [('state', '!=', 'install')]}"/>
+                    
+                    <button string="Close" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dependency_installer_wizard" model="ir.actions.act_window">
+        <field name="name">Install CCAvenue Dependencies</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">payment.ccavenue.dependency.installer</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
