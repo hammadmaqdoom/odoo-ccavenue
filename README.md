@@ -106,7 +106,7 @@ The module automatically sends email notifications on successful payments. The t
 
 ### Support
 For support and customization:
-- Email: support@yourcompany.com
+- Email: hammadmaqdoom@digitaro.co
 - Documentation: Check CCAvenue official documentation
 - Odoo Community: https://www.odoo.com/forum
 
