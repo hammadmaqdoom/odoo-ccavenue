@@ -1,7 +1,7 @@
 {
     'name': 'CCAvenue_Payment_Gateway',
     'version': '18.0.0.0.0',
-    'category': 'Accounting/Payment Acquirers',
+    'category': 'Accounting/Payment Providers',
     'summary': 'CCAvenue Payment Gateway Integration for UAE',
     'description': """
         Complete CCAvenue Payment Gateway Integration
@@ -46,9 +46,9 @@
     'data': [
         'security/ir.model.access.csv',
         'data/payment_method_data.xml',
-        'data/payment_acquirer_data.xml',
+        'data/payment_provider_data.xml',
         'data/mail_template_data.xml',
-        'views/payment_acquirer_views.xml',
+        'views/payment_provider_views.xml',
         'views/payment_transaction_views.xml',
         'views/account_move_views.xml',
         'views/sale_order_views.xml',
