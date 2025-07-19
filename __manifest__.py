@@ -1,6 +1,6 @@
 {
-    'name': 'CCAvenue Payment Gateway',
-    'version': '18.0.1.0.0',
+    'name': 'CCAvenue_Payment_Gateway',
+    'version': '18.0.0.0.0',
     'category': 'Accounting/Payment Acquirers',
     'summary': 'CCAvenue Payment Gateway Integration for UAE',
     'description': """
@@ -67,8 +67,8 @@
     },
     'installable': True,
     'auto_install': False,
-    'application': False,
+    'application': True,
     'license': 'LGPL-3',
-    'pre_init_hook': 'pre_init_hook',
-    'post_init_hook': 'post_init_hook',
+    # 'pre_init_hook': 'pre_init_hook',
+    # 'post_init_hook': 'post_init_hook',
 }
