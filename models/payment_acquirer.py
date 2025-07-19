@@ -35,30 +35,6 @@ class PaymentProvider(models.Model):
     )
 
     @api.model
-    def _check_dependencies(self):
-        """Check if all dependencies are installed"""
-        missing_deps = []
-        
-        try:
-            from Crypto.Cipher import AES
-            from Crypto.Util.Padding import pad, unpad
-        except ImportError:
-            missing_deps.append('pycryptodome')
-        
-        try:
-            import requests
-        except ImportError:
-            missing_deps.append('requests')
-        
-        if missing_deps:
-            raise UserError(_(
-                "Missing required Python packages for CCAvenue integration. "
-                "Please install: pip install %s"
-            ) % ' '.join(missing_deps))
-        
-        return True
-
-    @api.model
     def create(self, vals):
         """Override create to check dependencies"""
         if vals.get('code') == 'ccavenue':
@@ -156,8 +132,3 @@ class PaymentProvider(models.Model):
         except Exception as e:
             _logger.error("CCAvenue tracking ID generation failed: %s", str(e))
             raise ValidationError(_("Payment gateway communication error"))
-
-    def _ccavenue_generate_request_hash(self, tracking_id, currency, amount):
-        """Generate request hash for mobile SDK"""
-        data_string = f"{tracking_id}{currency}{amount}{self.ccavenue_working_key}"
-        return hashlib.sha512(data_string.encode()).hexdigest()
