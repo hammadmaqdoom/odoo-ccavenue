@@ -120,12 +120,12 @@ payment_ccavenue/
 │   └── main.py
 ├── data/
 │   ├── mail_template_data.xml
-│   ├── payment_acquirer_data.xml
+│   ├── payment_provider_data.xml
 │   └── payment_method_data.xml
 ├── models/
 │   ├── __init__.py
 │   ├── account_move.py
-│   ├── payment_acquirer.py
+│   ├── payment_provider.py
 │   ├── payment_transaction.py
 │   └── sale_order.py
 ├── security/
@@ -144,7 +144,7 @@ payment_ccavenue/
 │           └── payment_form.js
 ├── views/
 │   ├── account_move_views.xml
-│   ├── payment_acquirer_views.xml
+│   ├── payment_provider_views.xml
 │   ├── payment_ccavenue_templates.xml
 │   ├── payment_transaction_views.xml
 │   ├── portal_templates.xml
