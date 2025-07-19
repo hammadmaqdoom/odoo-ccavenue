@@ -6,6 +6,12 @@ import sys
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 
+# Define package mapping globally for reuse
+package_map = {
+    'Crypto': 'pycryptodome',
+    'requests': 'requests'
+}
+
 # Try importing dependencies with auto-install fallback
 try:
     from Crypto.Cipher import AES
@@ -14,16 +20,10 @@ try:
     import requests
 except ImportError as e:
     missing_package = str(e).split("'")[1] if "'" in str(e) else "unknown"
-    
+
     def install_missing_package():
         """Try to install missing package"""
-        package_map = {
-            'Crypto': 'pycryptodome',
-            'requests': 'requests'
-        }
-        
         package_to_install = package_map.get(missing_package, missing_package)
-        
         try:
             subprocess.check_call([
                 sys.executable, '-m', 'pip', 'install', package_to_install, '--user'
@@ -38,8 +38,7 @@ except ImportError as e:
             return True
         except Exception:
             return False
-    
-    # Try to auto-install
+
     if not install_missing_package():
         raise ImportError(f"Missing required package. Please install: pip install {package_map.get(missing_package, missing_package)}")
 
