@@ -3,46 +3,10 @@ import json
 import logging
 import subprocess
 import sys
+import base64
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 
-# Define package mapping globally for reuse
-package_map = {
-    'Crypto': 'pycryptodome',
-    'requests': 'requests'
-}
-
-# Try importing dependencies with auto-install fallback
-try:
-    from Crypto.Cipher import AES
-    from Crypto.Util.Padding import pad, unpad
-    import base64
-    import requests
-except ImportError as e:
-    missing_package = str(e).split("'")[1] if "'" in str(e) else "unknown"
-
-    def install_missing_package():
-        """Try to install missing package"""
-        package_to_install = package_map.get(missing_package, missing_package)
-        try:
-            subprocess.check_call([
-                sys.executable, '-m', 'pip', 'install', package_to_install, '--user'
-            ])
-            # Re-import after installation
-            if missing_package == 'Crypto':
-                from Crypto.Cipher import AES
-                from Crypto.Util.Padding import pad, unpad
-                import base64
-            elif missing_package == 'requests':
-                import requests
-            return True
-        except Exception:
-            return False
-
-    if not install_missing_package():
-        raise ImportError(f"Missing required package. Please install: pip install {package_map.get(missing_package, missing_package)}")
-
-_logger = logging.getLogger(__name__)
 
 class PaymentProvider(models.Model):
     _inherit = 'payment.provider'
@@ -123,38 +87,35 @@ class PaymentProvider(models.Model):
         return "https://secure.ccavenue.ae/transaction/appV1.do"
 
     def _ccavenue_encrypt(self, plain_text):
-        """Encrypt data using AES-128 encryption"""
+        key = self.ccavenue_working_key[:16].ljust(16, '0')
+        iv = '0000000000000000'
         try:
-            from Crypto.Cipher import AES
-            from Crypto.Util.Padding import pad
-            import base64
-        except ImportError:
-            raise UserError(_("Missing encryption library. Please install: pip install pycryptodome"))
-        
-        working_key = self.ccavenue_working_key.encode()
-        key = working_key[:16].ljust(16, b'0')
-        
-        cipher = AES.new(key, AES.MODE_CBC, b'0000000000000000')
-        padded_text = pad(plain_text.encode(), AES.block_size)
-        encrypted = cipher.encrypt(padded_text)
-        return base64.b64encode(encrypted).decode()
+            result = subprocess.run(
+                ['openssl', 'enc', '-aes-128-cbc', '-K', key.encode().hex(), '-iv', iv.encode().hex(), '-nosalt', '-base64'],
+                input=plain_text.encode(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True
+            )
+            return result.stdout.decode().strip()
+        except subprocess.CalledProcessError as e:
+            raise UserError(f"Encryption failed: {e.stderr.decode()}")
 
     def _ccavenue_decrypt(self, encrypted_text):
-        """Decrypt data using AES-128 decryption"""
+        key = self.ccavenue_working_key[:16].ljust(16, '0')
+        iv = '0000000000000000'
         try:
-            from Crypto.Cipher import AES
-            from Crypto.Util.Padding import unpad
-            import base64
-        except ImportError:
-            raise UserError(_("Missing encryption library. Please install: pip install pycryptodome"))
-        
-        working_key = self.ccavenue_working_key.encode()
-        key = working_key[:16].ljust(16, b'0')
-        
-        cipher = AES.new(key, AES.MODE_CBC, b'0000000000000000')
-        encrypted_data = base64.b64decode(encrypted_text)
-        decrypted = cipher.decrypt(encrypted_data)
-        return unpad(decrypted, AES.block_size).decode()
+            result = subprocess.run(
+                ['openssl', 'enc', '-aes-128-cbc', '-d', '-K', key.encode().hex(), '-iv', iv.encode().hex(), '-nosalt', '-base64'],
+                input=encrypted_text.encode(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=True
+            )
+            return result.stdout.decode().strip()
+        except subprocess.CalledProcessError as e:
+            raise UserError(f"Decryption failed: {e.stderr.decode()}")
+
 
     def _ccavenue_generate_tracking_id(self, tx_values):
         """Generate tracking ID via CCAvenue API"""
