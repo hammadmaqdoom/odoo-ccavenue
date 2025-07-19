@@ -7,6 +7,7 @@ import base64
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError, UserError
 
+_logger = logging.getLogger(__name__)
 
 class PaymentProvider(models.Model):
     _inherit = 'payment.provider'
